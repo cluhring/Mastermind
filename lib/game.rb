@@ -1,43 +1,46 @@
-require_relative 'code_generator'  # => true, false
-require_relative 'printer'         # => true, false
-require_relative 'guess_checker'   # => true, false
-require_relative 'game'            # => false, true
+require_relative 'code_generator'  # => true
+require_relative 'printer'         # => true
+require_relative 'guess_checker1'  # => true
+require_relative 'guess_checker2'  # => true
 
 class Game
-  attr_reader :guess,            # => :guess, :guess
-              :turns,            # => :turns, :turns
-              :secret_sequence,  # => :secret_sequence, :secret_sequence
-              :printer,          # => :printer, :printer
-              :command,          # => :command, :command
-              :instream,         # => :instream, :instream
-              :outstream,        # => :outstream, :outstream
-              :start_time,       # => :start_time, :start_time
-              :end_time          # => nil, nil
+  attr_reader :guess,            # => :guess
+              :turns,            # => :turns
+              #:secret_sequence,  # => :secret_sequence
+              :printer,          # => :printer
+              :command,          # => :command
+              :instream,         # => :instream
+              :outstream,        # => :outstream
+              :start_time,       # => :start_time
+              :end_time          # => nil
 
   def initialize(instream, outstream, printer)
-    @guess           = []
+    @guess           = command.split(//)
     @turns           = 1
     @secret_sequence = CodeGenerator.new
     @printer         = printer
-    @command         = ""
+    @command         = instream.gets.strip.chomp
     @instream        = instream
     @outstream       = outstream
     @start_time      = Time.now
     @end_time        = Time.now
-    @correct_colors  = GuessChecker.new(instream, @secret_sequence)
-    @correct_positions = Guess1.new(instream, @secret_sequence)
+    @correct_colors  = GuessChecker1.new(@command, @secret_sequence)
+    @how_many_correct_colors = @correct_colors.how_man_correct_colors
+    @correct_positions = GuessChecker2.new(@command, @secret_sequence)
   end
 
   def play
     start_time
     # outstream.puts printer.play_instructions
-    @command = instream.gets.strip
-    @guess = command.split(//)
+    # @command = instream.gets.strip.chomp
+    # @guess = command.split(//)
     until correct? || exit?
       # outstream.puts printer.wrong_guess(command, correct_colors, correct_positions, turns)
       # outstream.puts printer.command_request
       process_game_turn
+      self.play
     end
+  end
 end
 
   # def secret_sequence
@@ -48,13 +51,13 @@ def add_turn
   @turns += 1
 end
 
-def correct_colors
-  @correct_colors
-end
-
-def correct_positions
-  @correct_positions
-end
+# def correct_colors
+#   @correct_colors.how_many_correct_colors
+# end
+#
+# def correct_positions
+#   @correct_positions
+# end
 
 def too_short?
   command.length < 4
@@ -65,7 +68,7 @@ def too_long?
 end
 
 def correct?
-  guess == @secret_sequence
+  @guess == @secret_sequence.build_secret_sequence_array
 end
 
 def incorrect?
@@ -83,6 +86,11 @@ end
 def game_length
   end_time - start_time.round
 end
+
+# def get_secret_sequence
+#   code = CodeGenerator.new
+#   code.get_secret_sequence
+# end
 
 # def correct_colors
 #   color1 = guess.pop
@@ -127,21 +135,21 @@ end
 # end
 
   def process_game_turn
-    case
+  case
     when exit?
       outstream.puts printer.game_quit
     when instructions?
       outstream.puts printer.game_instructions
     when too_short?
-      outstream.puts printer.too_short
+      outstream.puts printer.too_shor
     when too_long?
       outstream.puts printer.too_long
     when correct?
-      outstream.puts printer.ending(@guess, game_length)
+      outstream.puts printer.ending(guess, game_length)
       end_time
     when incorrect?
-      outstream.puts printer.wrong_guess(command, correct_colors, correct_positions, turns)
+      outstream.puts printer.wrong_guess(@guess, @correct_colors, @correct_positions, turns)
       add_turn
+      puts @secret_sequence.build_secret_sequence_array
     end
-end
 end

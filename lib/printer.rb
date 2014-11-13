@@ -19,12 +19,12 @@ class Printer
   end
 
   def too_long
-    "Your guess was too long, don't worry, this shouldn't count as actual guess.\nPlease guess again." 
+    "Your guess was too long, don't worry, this shouldn't count as actual guess.\nPlease guess again."
     # command_request
   end
 
-  def ending(game_length)
-    "Congratulations! You guessed the secret sequence '#{@secret_sequence} in #{guesses.count} guesses over #{game_length} minutes,
+  def ending(command, guess, game_length)
+    "Congratulations! You guessed the secret sequence '#{command} in #{guess} guesses over #{game_length} minutes,
 22 seconds.\nDo you want to (p)lay again or (q)uit?"
   end
 
@@ -39,8 +39,7 @@ What's your guess?"
   end
 
   def wrong_guess(command, correct_colors, correct_positions, turns)
-    "#{command} has #{correct_colors} of the correct elements with #{correct_positions} in the correct positions.\n
-You've taken #{turns} guess.\n What's your next guess?"
+    "#{command} has #{correct_colors} of the correct elements with #{correct_positions} in the correct positions.\nYou've taken #{turns} guess.\nWhat's your next guess?"
   end
 
   def game_quit
