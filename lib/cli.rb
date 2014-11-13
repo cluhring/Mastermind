@@ -6,8 +6,8 @@
 # get user input
 # exit/quit game (q)
 
-require_relative 'game'            # => true
-require_relative 'printer'         # => false
+require_relative 'game'     # => true
+require_relative 'printer'  # => false
 # require_relative 'code_generator'  # => false
 # require_relative 'guess'           # => false
 # require_relative 'guess_checker'   # => false
