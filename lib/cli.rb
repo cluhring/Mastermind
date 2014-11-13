@@ -1,11 +1,3 @@
-# get user input
-# run a game loop
-# enter the game/play again (p)
-# instructions function (i)
-# guess again
-# get user input
-# exit/quit game (q)
-
 require_relative 'game'            # => true
 # require_relative 'printer'         # => false
 # require_relative 'code_generator'  # => false

@@ -3,9 +3,7 @@ class GuessChecker2
     @command = command                          # => "obyr"
     @secret_sequence = secret_sequence          # => "ybyy"
   end
-#ef correct_positions
-  # strand1 = @instream.split(//)
-  # strand2 = @secret_sequence.split(//)
+
   def correct_sequence
   command = @command.split(//)                  # => ["o", "b", "y", "r"]
   # secret_sequence = @secret_sequence.split(//)  # => ["y", "b", "y", "y"]
@@ -28,28 +26,6 @@ class GuessChecker2
   end                                      # => 2
 end
 end
-#   def initialize(user_input)
-#     @user_input = user_input.split(//)  # => ["y", "Y", "y", "B"]
-#     @valid_guess = 0                    # => 0
-#   end
-#
-#   # def valid_length?
-#   #   @user_input.length == 4
-#   # end
-#
-#   def count_guesses
-#     if user_input ==  # ~> NameError: undefined local variable or method `user_input' for #<Guess:0x007f95bc11b7d8>
-#     valid_guess += 1
-#   end
-# end
-#   # def valid_characters?
-#   #   @user_input.
-#   # end
-#
-# end
-#
-#
+
 # guess = GuessChecker2.new("obyr", "ybyy")  # => #<GuessChecker2:0x007fcbc2863040 @command="obyr", @secret_sequence="ybyy">
 # guess.correct_sequence                     # => 2
-
-# 4 - (user_guess.sanitize - user_guess.split) = number of correct

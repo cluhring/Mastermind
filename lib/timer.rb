@@ -1,5 +1,3 @@
-# timer function to be displayed after guessing correct sequence
-
 class Timer
   attr_reader :time  # => nil
   def initialize
