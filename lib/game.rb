@@ -29,55 +29,20 @@ class Game
   end                                                                                               # => nil
 
   def play
-    @time.start_time
-    @command = @instream.gets.strip.chomp
-    @guess = command.split(//)
-    if correct?
-      @time.end_time
-      outstream.puts printer.ending(@command, turns, @time.total_time)
-    else
+    @time.start
+    until exit? || correct?
+      @command = @instream.gets.strip
+      @guess = command.split(//)
       process_game_turn
-      self.play
     end
+    @time.stop
+    outstream.puts printer.ending(@command, turns, @time.total_time)
   end
-end
-
-def add_turn
-  @turns += 1
-end
-
-def too_short?
-  command.length < 4
-end
-
-def too_long?
-  command.length > 4
-end
-
-def correct?
-  @guess == @secret_sequence.build_secret_sequence_array
-end
-
-def incorrect?
-  !correct?
-end
-
-def exit?
-  command == "q" || command == "quit"
-end
-
-def instructions?
-  command == "i" || command == "instructions"
-end
-
-def play?
-  command == "p" || command == "play"
-end
 
   def process_game_turn
-  case
+    case
     when exit?
-       outstream.puts printer.game_quit
+      outstream.puts printer.game_quit
     when instructions?
       outstream.puts printer.game_instructions
     when too_short?
@@ -91,3 +56,37 @@ end
       puts "#{@time.total_time}"
     end
   end
+
+  def add_turn
+    @turns += 1
+  end
+
+  def too_short?
+    command.length < 4
+  end
+
+  def too_long?
+    command.length > 4
+  end
+
+  def correct?
+    @guess == @secret_sequence.build_secret_sequence_array
+  end
+
+  def incorrect?
+    !correct?
+  end
+
+  def exit?
+    command == "q" || command == "quit"
+  end
+
+  def instructions?
+    command == "i" || command == "instructions"
+  end
+
+  def play?
+    command == "p" || command == "play"
+  end
+
+end

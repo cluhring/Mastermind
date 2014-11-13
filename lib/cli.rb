@@ -25,7 +25,7 @@ class CLI
       @command = instream.gets.strip
       process_initial_commands
     end
-      outstream.puts printer.game_quit
+    outstream.puts printer.game_quit
   end
 
 private  # => CLI
