@@ -6,14 +6,18 @@
 # get user input
 # exit/quit game (q)
 
-require_relative 'game'     # => true
-require_relative 'printer'  # => false
+require_relative 'game'            # => true
+# require_relative 'printer'         # => false
 # require_relative 'code_generator'  # => false
-# require_relative 'guess'           # => false
-# require_relative 'guess_checker'   # => false
+# require_relative 'guess_checker1'  # => false
+# require_relative 'guess_checker2'  # => false
+# require_relative 'timer'           # => false
 
 class CLI
-  attr_reader :command, :printer, :instream, :outstream  # => nil
+  attr_reader :command,   # => :command
+              :printer,   # => :printer
+              :instream,  # => :instream
+              :outstream  # => nil
 
   def initialize(instream, outstream)
     @command = ""
@@ -29,10 +33,10 @@ class CLI
       @command = instream.gets.strip
       process_initial_commands
     end
-      # outstream.puts printer.game_quit
+      outstream.puts printer.game_quit
   end
 
-  # private  # => CLI
+private  # => CLI
 
   def process_initial_commands
     case

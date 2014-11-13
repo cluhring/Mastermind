@@ -2,17 +2,18 @@ require_relative 'code_generator'  # => true
 require_relative 'printer'         # => true
 require_relative 'guess_checker1'  # => true
 require_relative 'guess_checker2'  # => true
+require_relative 'timer'           # => true
 
 class Game
-  attr_reader :guess,       # => :guess
-              :turns,       # => :turns
-              # secret_sequence,  # => :secret_sequence
-              :printer,     # => :printer
-              :command,     # => :command
-              :instream,    # => :instream
-              :outstream,   # => :outstream
-              :start_time,  # => :start_time
-              :end_time     # => nil
+  attr_reader :guess,            # => :guess
+              :turns,            # => :turns
+              :secret_sequence,  # => :secret_sequence
+              :printer,          # => :printer
+              :command,          # => :command
+              :instream,         # => :instream
+              :outstream,        # => :outstream
+              :time     # => :time
+              # :end_time,         # => :end_time
 
   def initialize(instream, outstream, printer)
     @guess           = ""
@@ -21,35 +22,33 @@ class Game
     @command         = ""
     @instream        = instream
     @outstream       = outstream
-    @start_time      = Time.now
-    @end_time        = Time.now
+    @time            = Timer.new
+    # @end_time        = Time.now
     @secret_sequence = CodeGenerator.new
     @correct_colors  = GuessChecker1.new(@command, @secret_sequence.build_secret_sequence_array)
     # @how_many_correct_colors = @correct_colors.how_man_correct_colors
     @correct_positions = GuessChecker2.new(@command, @secret_sequence.build_secret_sequence_array)
     # @how_many_correct_positions = @correct_positions.correct_sequence
-  end
+  end                                                                                               # => nil
 
   def play
-    @start_time
+    @time.start_time
     # outstream.puts printer.play_instructions
     @command = @instream.gets.strip.chomp
     @guess = command.split(//)
-    until correct? || exit?
-      # outstream.puts printer.wrong_guess(command, correct_colors, correct_positions, turns)
+    if correct?
+      @time.end_time
+      outstream.puts printer.ending(@command, turns, @time.total_time)
+      # @time.end_time
+# outstream.puts printer.wrong_guess(command, correct_colors, correct_positions, turns)
       # outstream.puts printer.command_request
-
+    else
       process_game_turn
       self.play
-      end
-      @end_time
+    end
   end
 end
 
-  # def secret_sequence
-  #   4.times {@secret_sequence << ["r", "g", "b", "y"].sample}
-  #   # puts @secret_sequence.join
-  # end
 def add_turn
   @turns += 1
 end
@@ -86,9 +85,13 @@ def instructions?
   command == "i" || command == "instructions"
 end
 
-def game_length
-  end_time - start_time
+def play?
+  command == "p" || command == "play"
 end
+
+# def game_length
+#   end_time - start_time
+# end
 
 # def get_secret_sequence
 #   code = CodeGenerator.new
@@ -140,19 +143,20 @@ end
   def process_game_turn
   case
     when exit?
-      outstream.puts printer.game_quit
+       outstream.puts printer.game_quit
     when instructions?
       outstream.puts printer.game_instructions
     when too_short?
       outstream.puts printer.too_short
     when too_long?
+      # @time.end_time
       outstream.puts printer.too_long
-    when correct?
-      outstream.puts printer.ending(@command, turns, game_length)
+    # when correct?
+    #   outstream.puts printer.ending(@command, turns, @time.total_time)
     when incorrect?
       outstream.puts printer.wrong_guess(@command, @correct_colors.how_many_correct_colors, @correct_positions.correct_sequence, turns)
       add_turn
       puts @secret_sequence.build_secret_sequence_array
-      puts game_length
+      puts @time.total_time
     end
-end
+  end
