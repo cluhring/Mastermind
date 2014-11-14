@@ -1,4 +1,4 @@
-class GuessChecker2
+class PositionChecker
   def initialize(command, secret_sequence)
     @command = command                          # => "obyr"
     @secret_sequence = secret_sequence          # => "ybyy"

@@ -1,7 +1,7 @@
 require_relative 'code_generator'  # => true
 require_relative 'printer'         # => true
-require_relative 'guess_checker1'  # => true
-require_relative 'guess_checker2'  # => true
+require_relative 'position_checker'  # => true
+require_relative 'color_checker'  # => true
 require_relative 'timer'           # => true
 
 class Game
@@ -24,13 +24,14 @@ class Game
     @outstream       = outstream
     @time            = Timer.new
     @secret_sequence = CodeGenerator.new
-    @correct_colors  = GuessChecker1.new(@command, @secret_sequence.build_secret_sequence_array)
-    @correct_positions = GuessChecker2.new(@command, @secret_sequence.build_secret_sequence_array)
+
   end                                                                                               # => nil
 
   def play
     @time.start
     until exit? || correct?
+      @correct_colors  = ColorChecker.new(@command, @secret_sequence.build_secret_sequence_array)
+      @correct_positions = PositionChecker.new(@command, @secret_sequence.build_secret_sequence_array)
       @command = @instream.gets.strip
       @guess = command.split(//)
       process_game_turn

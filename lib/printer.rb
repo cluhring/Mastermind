@@ -19,7 +19,7 @@ class Printer
   end
 
   def ending(command, turns, total_time)
-    "Congratulations! You guessed the secret sequence (#{command}) in #{turns} guesses spanning #{total_time.round} minutes."
+    "Congratulations! You guessed the secret sequence (#{command}) in #{turns} guesses spanning #{total_time.round} seconds."
   end
 
   def play_instructions
